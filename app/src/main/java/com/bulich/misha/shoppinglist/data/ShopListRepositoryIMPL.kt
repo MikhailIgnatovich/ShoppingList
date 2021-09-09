@@ -5,12 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import com.bulich.misha.shoppinglist.domain.ShopItem
 import com.bulich.misha.shoppinglist.domain.ShopListRepository
 import java.lang.RuntimeException
+import kotlin.random.Random
 
 object ShopListRepositoryIMPL : ShopListRepository {
 
     private val shopListLD = MutableLiveData<List<ShopItem>>()
     private val shopList = mutableListOf<ShopItem>()
     private var autoIncrementID = 0
+
+    init {
+        for (i in 0 until 10) {
+            val item = ShopItem("Name $i", i, Random.nextBoolean())
+            addShopItem(item)
+        }
+    }
 
     override fun addShopItem(shopItem: ShopItem) {
         if (shopItem.id == ShopItem.UNDEFINED_ID) {
