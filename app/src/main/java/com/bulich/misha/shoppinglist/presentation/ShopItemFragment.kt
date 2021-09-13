@@ -27,6 +27,7 @@ class ShopItemFragment : Fragment() {
     private lateinit var etName: TextInputEditText
     private lateinit var etCount: TextInputEditText
     private lateinit var buttonSave: Button
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
 
     private var screenMode: String = MODE_UNKNOWN
     private var shopItemId: Int = ShopItem.UNDEFINED_ID
@@ -34,6 +35,15 @@ class ShopItemFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseParams()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishedListener) {
+            onEditingFinishedListener = context
+        } else {
+            throw RuntimeException("Activity not implementation OnEditingFinishedListener")
+        }
     }
 
 
@@ -80,7 +90,7 @@ class ShopItemFragment : Fragment() {
         }
 
         viewModel.finishActivity.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+            onEditingFinishedListener.onEditingFinished()
         }
     }
 
@@ -170,6 +180,9 @@ class ShopItemFragment : Fragment() {
         buttonSave = view.findViewById(R.id.button_save)
     }
 
+    interface OnEditingFinishedListener{
+        fun onEditingFinished()
+    }
 
     companion object {
         private const val SCREEN_MODE = "extra_mode"

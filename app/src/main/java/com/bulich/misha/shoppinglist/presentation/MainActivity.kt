@@ -2,6 +2,7 @@ package com.bulich.misha.shoppinglist.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bulich.misha.shoppinglist.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var shopListAdapter: ShopListAdapter
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun launchFragment(fragment: Fragment) {
         supportFragmentManager.popBackStack()
-        supportFragmentManager.beginTransaction().add(
+        supportFragmentManager.beginTransaction().replace(
             R.id.shop_item_container,
             fragment
         ).addToBackStack(null)
@@ -112,5 +113,14 @@ class MainActivity : AppCompatActivity() {
         shopListAdapter.onShopItemLongClickListener = {
             viewModel.changeEnableState(it)
         }
+    }
+
+    override fun onEditingFinished() {
+        Toast.makeText(
+            this,
+            "Successful",
+            Toast.LENGTH_SHORT
+        ).show()
+        supportFragmentManager.popBackStack()
     }
 }
