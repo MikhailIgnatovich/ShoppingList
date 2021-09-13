@@ -46,10 +46,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction().add(
             R.id.shop_item_container,
             fragment
-        ).commit()
+        ).addToBackStack(null)
+            .commit()
     }
 
     private fun setupRecycler() {
